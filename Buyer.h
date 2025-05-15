@@ -5,4 +5,16 @@
 #ifndef BUYER_H
 #define BUYER_H
 
+// Jawad Khadra
+#include "project.h"
+#include "User.h"
+
+// Jawad Khadra
+class Buyer : public User {
+protected:
+
+public:
+
+};
+
 #endif //BUYER_H
