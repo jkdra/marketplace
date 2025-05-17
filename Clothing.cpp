@@ -1,9 +1,46 @@
-//
-// Created by Jawad Khadra on 5/14/25.
-//
-
 #include "Clothing.h"
+#include <iostream>
 
-using namespace std;
+// Constructor
+Clothing::Clothing(const std::string& name,
+                   double price,
+                   const std::string& size,
+                   const std::string& material,
+                   const std::string& brand)
+  : Product(name, price)
+  , size(size)
+  , material(material)
+  , brand(brand)
+{}
 
-// TODO: Add implementation of Clothing class.
+// Type tag
+std::string Clothing::getType() const {
+    return "Clothing";
+}
+
+// Print all details
+void Clothing::display(std::ostream& os) const {
+    os  << "[Clothing] "
+        << brand
+        << " "
+        << name
+        << " (Size: "
+        << size
+        << ", Material: "
+        << material
+        << ") - $"
+        << price;
+}
+
+// Accessors
+const std::string& Clothing::getSize() const {
+    return size;
+}
+
+const std::string& Clothing::getMaterial() const {
+    return material;
+}
+
+const std::string& Clothing::getBrand() const {
+    return brand;
+}
