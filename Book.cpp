@@ -1,9 +1,46 @@
-//
-// Created by Jawad Khadra on 5/14/25.
-//
-
 #include "Book.h"
+#include <iostream>
 
-using namespace std;
+// Constructor
+Book::Book(const std::string& name,
+           double price,
+           const std::string& author,
+           const std::string& isbn,
+           int pageCount)
+  : Product(name, price)
+  , author(author)
+  , isbn(isbn)
+  , pageCount(pageCount)
+{}
 
-// TODO: Add implementation of Book class.
+// Type tag
+std::string Book::getType() const {
+    return "Book";
+}
+
+// Print all details
+void Book::display(std::ostream& os) const {
+    os  << "[Book] "
+        << name
+        << " by "
+        << author
+        << " (ISBN: "
+        << isbn
+        << ", "
+        << pageCount
+        << " pp.) - $"
+        << price;
+}
+
+// Accessors
+const std::string& Book::getAuthor() const {
+    return author;
+}
+
+const std::string& Book::getISBN() const {
+    return isbn;
+}
+
+int Book::getPageCount() const {
+    return pageCount;
+}
