@@ -1,18 +1,28 @@
-//
-// Created by Jawad Khadra on 5/14/25.
-//
-
 #ifndef BOOK_H
 #define BOOK_H
-
-// Jawad Khadra
-#include "project.h"
 #include "Product.h"
+#include <string>
 
-// Jawad Khadra
 class Book : public Product {
-protected:
 public:
-};
+    Book(const std::string& name,
+         double price,
+         const std::string& author,
+         const std::string& isbn,
+         int pageCount);
 
+    // Product interface
+    std::string getType() const override;
+    void display(std::ostream& os) const override;
+
+    // Accessors
+    const std::string& getAuthor() const;
+    const std::string& getISBN() const;
+    int getPageCount() const;
+
+private:
+    std::string author;
+    std::string isbn;
+    int pageCount;
+};
 #endif //BOOK_H
