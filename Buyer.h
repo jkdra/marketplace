@@ -5,6 +5,9 @@
 
 #include "project.h"
 #include "User.h"
+#include "Wallet.h"
+#include "Product.h"
+
 
 class Buyer : public User {
 public:
@@ -13,6 +16,11 @@ public:
     string getEmail() const;
     string getPassword() const;
     string getType() const;
+    Wallet& getWallet();
+    void addOrder(shared_ptr<Product> product);
+private:
+    Wallet myWallet;
+    vector<shared_ptr<Product>> myOrders;
 };
 
 #endif //BUYER_H

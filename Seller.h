@@ -14,6 +14,9 @@ public:
     string getEmail() const;
     string getPassword() const;
     string getType() const;
+    void addProduct(shared_ptr<Product> product);
+    void removeProduct(const std::string& productName);
+    const std::vector<std::shared_ptr<Product>>& getProducts() const;
 private:
     string company;
 };

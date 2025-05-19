@@ -18,3 +18,21 @@ string Seller::getPassword() const {
 string Seller::getType() const {
     return "Seller";
 }
+
+void Seller::addProduct(std::shared_ptr<Product> product) {
+    myProducts.push_back(product);
+}
+
+void Seller::removeProduct(const std::string& productName) {
+    myProducts.erase(
+        std::remove_if(myProducts.begin(), myProducts.end(), [&](const std::shared_ptr<Product>& p)
+    {
+        return p->getName() == productName;
+    }),
+        myProducts.end()
+    );
+}
+
+const std::vector<std::shared_ptr<Product>>& Seller::getProducts() const {
+    return myProducts;
+}
