@@ -1,20 +1,18 @@
-//
-// Created by Jawad Khadra on 5/14/25.
-//
+// Ammar Soliman
 
 #ifndef BUYER_H
 #define BUYER_H
 
-// Jawad Khadra
 #include "project.h"
 #include "User.h"
 
-// Jawad Khadra
 class Buyer : public User {
-protected:
-
 public:
-
+    Buyer(const string& name, const string& email, const string& password);
+    string getName() const;
+    string getEmail() const;
+    string getPassword() const;
+    string getType() const;
 };
 
 #endif //BUYER_H

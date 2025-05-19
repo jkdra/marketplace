@@ -1,20 +1,21 @@
-//
-// Created by Jawad Khadra on 5/14/25.
-//
+// Ammar Soliman
 
 #ifndef SELLER_H
 #define SELLER_H
 
-// Jawad Khadra
 #include "project.h"
 #include "User.h"
 
-// Jawad Khadra
+
 class Seller : public User {
-protected:
-
 public:
-
+    Seller(const string& name, const string& email, const string& password, const string& company);
+    string getName() const;
+    string getEmail() const;
+    string getPassword() const;
+    string getType() const;
+private:
+    string company;
 };
 
-#endif //SELLER_H
+#endif
