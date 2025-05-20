@@ -42,9 +42,4 @@ void Seller::display(std::ostream& os) const {
 		<< "\nType: " << getType()
 		<< "\nCompany: " << company;
 }
-void Seller::display(std::ostream& os) const {
-	os << "Name: " << getName()
-		<< "\nEmail: " << getEmail()
-		<< "\nType: " << getType()
-		<< "\nCompany: " << company;
-}
+
