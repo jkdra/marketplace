@@ -17,6 +17,8 @@ public:
     void addProduct(shared_ptr<Product> product);
     void removeProduct(const std::string& productName);
     const std::vector<std::shared_ptr<Product>>& getProducts() const;
+    void display(std::ostream& os) const override;
+
 private:
     string company;
 };
