@@ -9,28 +9,31 @@ using namespace std;
 
 class User {
 public:
-    User(const string& name, const string& email, const string& password);
-    virtual ~User() = default;
-    virtual string getName() const = 0;
-    virtual string getEmail() const = 0;
-    virtual string getType() const = 0;
-    virtual string getPassword() const = 0;
-    friend std::ostream& operator<<(std::ostream& os, const User& user);
+	User(const string& name, const string& email, const string& password);
+	virtual ~User() = default;
+	virtual string getName() const = 0;
+	virtual string getEmail() const = 0;
+	virtual string getType() const = 0;
+	virtual string getPassword() const = 0;
+	friend std::ostream& operator<<(std::ostream& os, const User& user);
+	virtual void display(std::ostream& os) const = 0;
+
+
 
 protected:
-    string name;
-    string email;
-    string password;
+	string name;
+	string email;
+	string password;
 };
 
 class storeUser {
 private:
-    vector<shared_ptr<User>> users;
+	vector<shared_ptr<User>> users;
 public:
-    ~storeUser();
-    void addUser(shared_ptr<User> user);
-    // storeUser.h
-    shared_ptr<User> findUserByEmail(const std::string& email);
+	~storeUser();
+	void addUser(shared_ptr<User> user);
+	// storeUser.h
+	shared_ptr<User> findUserByEmail(const std::string& email);
 
 
 };

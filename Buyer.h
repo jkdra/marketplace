@@ -18,6 +18,8 @@ public:
     string getType() const;
     Wallet& getWallet();
     void addOrder(shared_ptr<Product> product);
+    void display(std::ostream& os) const override;
+
 private:
     Wallet myWallet;
     vector<shared_ptr<Product>> myOrders;
