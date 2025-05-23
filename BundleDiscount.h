@@ -1,4 +1,4 @@
-//
+// Astrid Shao
 //  BundleDiscount.h
 
 #ifndef BUNDLE_DISCOUNT_H
