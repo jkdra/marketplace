@@ -21,16 +21,16 @@ string Buyer::getType() const {
 }
 
 std::ostream& operator<<(std::ostream& os, const Buyer& buyer) {
-	os << static_cast<const User&>(Buyer)
+	os << static_cast<const User&>(buyer)
 		<< "\nWallet Balance: $" << buyer.getWallet().getBalance();
 	return os;
 }
 
-Wallet& Buyer::getWallet() const {
+Wallet Buyer::getWallet() const {
 	return wallet;
 }
 
-void Buyer::addOrder(shared_ptr<Product> product) {
+void Buyer::addOrder(const shared_ptr<Product>& product) {
 	if (wallet.getBalance() >= product->getPrice()) {
 		myOrders.push_back(product);
 		wallet.withdraw(product->getPrice());

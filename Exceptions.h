@@ -9,7 +9,7 @@ using namespace std;
 // Justin Dodd
 class CacheException : public exception {
 	public:
-	ProductNotFoundException() {}
+	CacheException() {}
 	const char* what() const noexcept override { return "Invalid Cache"; }
 };
 

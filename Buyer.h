@@ -19,8 +19,10 @@ public:
     string getEmail() const override;
     string getPassword() const override;
     string getType() const override;
-    Wallet& getWallet() const;
-    void addOrder(shared_ptr<Product> product);
+    void display(std::ostream& os) const override;
+
+    Wallet getWallet() const;
+    void addOrder(const shared_ptr<Product> &product);
 
     // Overloading << operator by Jawad Khadra
     friend ostream& operator<<(ostream& os, const Buyer& buyer);

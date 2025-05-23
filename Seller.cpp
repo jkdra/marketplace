@@ -6,16 +6,16 @@ using namespace std;
 Seller::Seller(const string& name, const string& email, const string& password, const string& company)
 	: User(name, email, password), company(company) {
 }
-string Seller::getName() const {
+string Seller::getName() const override {
 	return name;
 }
-string Seller::getEmail() const {
+string Seller::getEmail() const override{
 	return email;
 }
-string Seller::getPassword() const {
+string Seller::getPassword() const  override{
 	return password;
 }
-string Seller::getType() const {
+string Seller::getType() const  override {
 	return "Seller";
 }
 string Seller::getCompany() const {

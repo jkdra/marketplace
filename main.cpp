@@ -80,29 +80,28 @@ int main() {
 					userStoring.addUser(make_shared <Seller>(name, email, password, company));
 				}
 				break;
-
-				case 3: {
-					string email, password;
-					cout << "Enter your email: ";
-					getline(cin, email);
-					cout << "Enter your password: ";
-					getline(cin, password);
-					clearInputBuffer();
-
-					shared_ptr<User> user = userStoring.findUserByEmail(email);
-					if (user && user->getPassword() == password) {
-						cout << "Welcome, " << user->getName() << "!" << endl;
-						// need a display products function
-						// need a create order function
-					}
-					else {
-						cout << "Invalid email or password." << endl;
-					}
-					break;
+							}
+							case 3: {
+				string email, password;
+				cout << "Enter your email: ";
+				getline(cin, email);
+				cout << "Enter your password: ";
+				getline(cin, password);
+				clearInputBuffer();
+				
+				shared_ptr<User> user = userStoring.findUserByEmail(email);
+				if (user && user->getPassword() == password) {
+					cout << "Welcome, " << user->getName() << "!" << endl;
+					// need a display products function
+					// need a create order function
 				}
+				else {
+					cout << "Invalid email or password." << endl;
+				}
+				break;
+							}
 				// Add other cases as needed
 			}
-		}
 	} while (menuChoice != 0);
 	return 0;
 }

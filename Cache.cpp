@@ -2,24 +2,26 @@
 
 #include "Cache.h"
 
-// self explanatory, only append if not already in vector
+using namespace std;
+
+// self-explanatory, only append if not already in vector
 template<typename T>
-void push_back_unique(std::vector<T>& vec, const T& value) {
-	if (std::find(vec.begin(), vec.end(), value) == vec.end()) {
+void push_back_unique(vector<T>& vec, const T& value) {
+	if (find(vec.begin(), vec.end(), value) == vec.end()) {
 		vec.push_back(value);
 	}
 }
 
 // split string into parts by delimiter
-std::vector<std::string> split(const std::string& str, char delimiter) {
-	std::vector<std::string> parts = std::vector<std::string>();
+vector<string> split(const string& str, char delimiter) {
+	vector<string> parts = vector<string>();
 	
 	// append everything between delimiters, if any
-	std::size_t idx = 0, idx_delim = str.find(delimiter);
-	while (idx_delim != std::string::npos) {
+	size_t idx = 0, idx_delim = str.find(delimiter);
+	while (idx_delim != string::npos) {
 		parts.push_back(str.substr(idx, idx_delim - idx));
 		
-		// move to next possible delimiter
+		// move to the next possible delimiter
 		idx = idx_delim + 1;
 		idx_delim = str.find(delimiter, idx);
 	}
@@ -30,7 +32,7 @@ std::vector<std::string> split(const std::string& str, char delimiter) {
 }
 
 // parse product/transaction id from string
-std::size_t parse_id(const char& prefix, const std::string& str) {
+size_t parse_id(const char& prefix, const string& str) {
 	// check for valid prefix
 	if (str.empty() || str[0] != prefix || str.length() < 2) {
 		throw CacheException();
@@ -38,65 +40,57 @@ std::size_t parse_id(const char& prefix, const std::string& str) {
 	
 	// parse id
 	try {
-		return std::stoul(str.substr(1));
-	} catch (const std::invalid_argument& e) {
+		return stoul(str.substr(1));
+	} catch (...) {
 		throw CacheException();
 	}
 }
 
-// self explanatory
-double parse_double(const std::string& str) {
-	try {
-		return std::stod(str);
-	} catch (const std::invalid_argument& e) {
-		throw CacheException();
-	}
+// self-explanatory
+double parse_double(const string& str) {
+	try { return stod(str); }
+	catch (...) { throw CacheException(); }
 }
 
-// self explanatory
-int parse_int(const std::string& str) {
-	try {
-		return std::stoi(str);
-	} catch (const std::invalid_argument& e) {
-		throw CacheException();
-	}
+// self-explanatory
+int parse_int(const string& str) {
+	try { return stoi(str); }
+	catch (...) { throw CacheException(); }
 }
 
 // attempt to load cache from file
-void Cache::load_cache(const std::string& filename = "exampledata.txt") {
+void Cache::load_cache(const string& filename = "exampledata.txt") {
 	// try open file
-	std::string fileStr = "";
-	std::ifstream file(filename, std::ios::in);
-	if (!file.is_open()) {
-		throw std::runtime_error("Could not open file");
-	}
+	string fileStr = "";
+	ifstream file(filename, ios::in);
+	if (!file.is_open()) throw runtime_error("Could not open file");
 	
 	// temp storage during parsing
-	std::vector<DummyBuyer> temp_buyers = std::vector<DummyBuyer>();
-	std::vector<DummySeller> temp_sellers = std::vector<DummySeller>();
-	std::vector<DummyBook> temp_books = std::vector<DummyBook>();
-	std::vector<DummyClothing> temp_clothing = std::vector<DummyClothing>();
-	std::vector<DummyElectronics> temp_electronics = std::vector<DummyElectronics>();
-	std::vector<DummyTransaction> temp_transactions = std::vector<DummyTransaction>();
+	vector<DummyBuyer> temp_buyers = vector<DummyBuyer>();
+	vector<DummySeller> temp_sellers = vector<DummySeller>();
+	vector<DummyBook> temp_books = vector<DummyBook>();
+	vector<DummyClothing> temp_clothing = vector<DummyClothing>();
+	vector<DummyElectronics> temp_electronics = vector<DummyElectronics>();
+	vector<DummyTransaction> temp_transactions = vector<DummyTransaction>();
 	
 	try {
 		// parse each line
-		std::string line = "";
-		while (std::getline(file, line)) {
+		string line = "";
+		while (getline(file, line)) {
 			// skip empty lines
 			if (line.empty()) {
 				continue;
 			}
 			
 			// require entry type
-			std::size_t field_sep = line.find(':');
-			if (field_sep == std::string::npos) {
+			size_t field_sep = line.find(':');
+			if (field_sep == string::npos) {
 				throw CacheException();
 			}
 			
 			// parse entry type and its fields
-			std::string type = line.substr(0, field_sep);
-			std::vector<std::string> fields = split(line.substr(field_sep + 1), '|');
+			string type = line.substr(0, field_sep);
+			vector<string> fields = split(line.substr(field_sep + 1), '|');
 			if (type == "Buyer") {
 				// requires `name`, `email`, `password`, `balance`, and at least one `PID`
 				if (fields.size() < 5) {
@@ -104,9 +98,9 @@ void Cache::load_cache(const std::string& filename = "exampledata.txt") {
 				}
 				
 				// check for valid product ids
-				std::vector<std::size_t> product_ids = std::vector<std::size_t>();
-				for (std::size_t i = 4; i < fields.size(); ++i) {
-					std::size_t id_num = parse_id('P', fields[i]);
+				vector<size_t> product_ids = vector<size_t>();
+				for (size_t i = 4; i < fields.size(); ++i) {
+					size_t id_num = parse_id('P', fields[i]);
 					push_back_unique(product_ids, id_num);
 				}
 				
@@ -125,9 +119,9 @@ void Cache::load_cache(const std::string& filename = "exampledata.txt") {
 				}
 				
 				// check for valid product ids
-				std::vector<std::size_t> product_ids = std::vector<std::size_t>();
-				for (std::size_t i = 4; i < fields.size(); ++i) {
-					std::size_t id_num = parse_id('P', fields[i]);
+				vector<size_t> product_ids = vector<size_t>();
+				for (size_t i = 4; i < fields.size(); ++i) {
+					size_t id_num = parse_id('P', fields[i]);
 					push_back_unique(product_ids, id_num);
 				}
 				
@@ -203,10 +197,10 @@ void Cache::load_cache(const std::string& filename = "exampledata.txt") {
 		}
 		
 		// create products
-		std::map<std::size_t, std::shared_ptr<Product>> products = std::map<std::size_t, std::shared_ptr<Product>>();
-		std::size_t max_id = -1;
+		map<size_t, shared_ptr<Product>> products = map<size_t, shared_ptr<Product>>();
+		size_t max_id = -1;
 		
-		for (std::size_t i = 0; i < temp_books.size(); ++i) {
+		for (size_t i = 0; i < temp_books.size(); ++i) {
 			DummyBook& dummy = temp_books[i];
 			
 			// must be unique
@@ -214,66 +208,54 @@ void Cache::load_cache(const std::string& filename = "exampledata.txt") {
 				throw CacheException();
 			}
 			
-			std::shared_ptr<Book> book = std::make_shared<Book>(dummy.name, dummy.price, dummy.author, dummy.isbn, dummy.page_count);
+			shared_ptr<Book> book = make_shared<Book>(dummy.name, dummy.price, dummy.author, dummy.isbn, dummy.page_count);
 			book->id = dummy.id;
 			products.emplace(dummy.id, book);
-			max_id = std::max(max_id, dummy.id);
+			max_id = max(max_id, dummy.id);
 		}
 		
-		for (std::size_t i = 0; i < temp_clothing.size(); ++i) {
+		for (size_t i = 0; i < temp_clothing.size(); ++i) {
 			DummyClothing& dummy = temp_clothing[i];
 			
 			// must be unique
-			if (products.find(dummy.id) != products.end()) {
-				throw CacheException();
-			}
+			if (products.find(dummy.id) != products.end()) throw CacheException();
 			
-			std::shared_ptr<Clothing> clothing = std::make_shared<Clothing>(dummy.name, dummy.price, dummy.size, dummy.material, dummy.brand);
+			shared_ptr<Clothing> clothing = make_shared<Clothing>(dummy.name, dummy.price, dummy.size, dummy.material, dummy.brand);
 			clothing->id = dummy.id;
 			products.emplace(dummy.id, clothing);
-			max_id = std::max(max_id, dummy.id);
+			max_id = max(max_id, dummy.id);
 		}
 		
-		for (std::size_t i = 0; i < temp_electronics.size(); ++i) {
-			DummyElectronics& dummy = temp_electronics[i];
+		for (auto & dummy : temp_electronics) {
+				// must be unique
+			if (products.find(dummy.id) != products.end()) throw CacheException();
 			
-			// must be unique
-			if (products.find(dummy.id) != products.end()) {
-				throw CacheException();
-			}
-			
-			std::shared_ptr<Electronics> electronics = std::make_shared<Electronics>(dummy.name, dummy.price, dummy.brand, dummy.model, dummy.warranty_months);
+			shared_ptr<Electronics> electronics = make_shared<Electronics>(dummy.name, dummy.price, dummy.brand, dummy.model, dummy.warranty_months);
 			electronics->id = dummy.id;
 			products.emplace(dummy.id, electronics);
-			max_id = std::max(max_id, dummy.id);
+			max_id = max(max_id, dummy.id);
 		}
 		
 		Product::nextId = max_id + 1;
 		
 		// create users
-		Cache::users = std::map<std::string, std::shared_ptr<User>>();
+		Cache::users = map<string, shared_ptr<User>>();
 		
-		for (std::size_t i = 0; i < temp_buyers.size(); ++i) {
-			DummyBuyer& dummy = temp_buyers[i];
+		for (auto & dummy : temp_buyers) {
+				// must be unique
+			if (Cache::users.value().contains(dummy.email)) throw CacheException();
 			
-			// must be unique
-			if (Cache::users.value().find(dummy.email) != Cache::users.value().end()) {
-				throw CacheException();
-			}
-			
-			std::shared_ptr<Buyer> buyer = std::make_shared<Buyer>(dummy.name, dummy.email, dummy.password);
+			shared_ptr<Buyer> buyer = make_shared<Buyer>(dummy.name, dummy.email, dummy.password);
 			
 			// apply saved balance
-			buyer->myWallet.balance = dummy.balance;
+			buyer->wallet.balance = dummy.balance;
 			
 			// apply saved orders
-			for (std::size_t j = 0; j < dummy.orders.size(); ++j) {
-				std::size_t id = dummy.orders[j];
+			for (size_t j = 0; j < dummy.orders.size(); ++j) {
+				size_t id = dummy.orders[j];
 				
 				// must be valid
-				if (products.find(id) == products.end()) {
-					throw CacheException();
-				}
+				if (products.find(id) == products.end()) throw CacheException();
 				
 				push_back_unique(buyer->myOrders, products.at(id));
 			}
@@ -281,50 +263,36 @@ void Cache::load_cache(const std::string& filename = "exampledata.txt") {
 			Cache::users.value().emplace(dummy.email, buyer);
 		}
 		
-		for (std::size_t i = 0; i < temp_sellers.size(); ++i) {
-			DummySeller& dummy = temp_sellers[i];
+		for (auto & dummy : temp_sellers) {
+				// must be unique
+			if (Cache::users.value().find(dummy.email) != Cache::users.value().end()) throw CacheException();
 			
-			// must be unique
-			if (Cache::users.value().find(dummy.email) != Cache::users.value().end()) {
-				throw CacheException();
-			}
-			
-			std::shared_ptr<Seller> seller = std::make_shared<Seller>(dummy.name, dummy.email, dummy.password, dummy.company);
+			shared_ptr<Seller> seller = make_shared<Seller>(dummy.name, dummy.email, dummy.password, dummy.company);
 			
 			// apply saved products
-			for (std::size_t j = 0; j < dummy.products.size(); ++j) {
-				std::size_t id = dummy.products[j];
-				
-				// must be valid
-				if (products.find(id) == products.end()) {
-					throw CacheException();
-				}
+			for (unsigned long id : dummy.products) {
+					// must be valid
+				if (products.find(id) == products.end()) throw CacheException();
 				
 				push_back_unique(seller->myProducts, products.at(id));
 			}
 		}
 		
 		// create transactions
-		Cache::transactions = std::map<std::size_t, std::shared_ptr<Transaction>>();
+		Cache::transactions = map<size_t, shared_ptr<Transaction>>();
 		
-		for (std::size_t i = 0; i < temp_transactions.size(); ++i) {
-			DummyTransaction& dummy = temp_transactions[i];
+		for (auto & dummy : temp_transactions) {
+				// must be unique
+			if (Cache::transactions.value().find(dummy.id) != Cache::transactions.value().end()) throw CacheException();
 			
-			// must be unique
-			if (Cache::transactions.value().find(dummy.id) != Cache::transactions.value().end()) {
-				throw CacheException();
-			}
-			
-			std::shared_ptr<User> buyer = Cache::users.value().at(dummy.buyer_email);
-			std::shared_ptr<User> seller = Cache::users.value().at(dummy.seller_email);
-			std::shared_ptr<Product> product = products.at(dummy.product_id);
+			shared_ptr<User> buyer = Cache::users.value().at(dummy.buyer_email);
+			shared_ptr<User> seller = Cache::users.value().at(dummy.seller_email);
+			shared_ptr<Product> product = products.at(dummy.product_id);
 			
 			// must be valid
-			if (buyer == nullptr || seller == nullptr || product == nullptr) {
-				throw CacheException();
-			}
+			if (buyer == nullptr || seller == nullptr || product == nullptr) throw CacheException();
 			
-			std::shared_ptr<Transaction> transaction = std::make_shared<Transaction>(dummy.id, buyer, seller, product);
+			shared_ptr<Transaction> transaction = make_shared<Transaction>(buyer, seller, product);
 			
 			// apply saved timestamp
 			transaction->timestamp = dummy.timestamp;
@@ -335,10 +303,10 @@ void Cache::load_cache(const std::string& filename = "exampledata.txt") {
 		// clean up and rethrow exception
 		file.close();
 		
-		Cache::filename = std::nullopt;
+		Cache::filename = nullopt;
 		
-		Cache::users = std::nullopt;
-		Cache::transactions = std::nullopt;
+		Cache::users = nullopt;
+		Cache::transactions = nullopt;
 		
 		throw;
 	}
@@ -349,67 +317,58 @@ void Cache::load_cache(const std::string& filename = "exampledata.txt") {
 }
 
 // attempt to save cache to file
-void Cache::save_cache(const std::optional<std::string>& filename = std::nullopt) {
+void Cache::save_cache(const optional<string>& filename = nullopt) {
 	// check for valid cache
-	if (!Cache::users.has_value()) {
-		throw CacheException();
-	}
+	if (!Cache::users.has_value()) throw CacheException();
 	
 	// overwrite cache filename if provided
-	if (filename.has_value()) {
-		Cache::filename = filename;
-	} else if (!Cache::filename.has_value()) {
-		throw std::runtime_error("no filename provided");
-	}
+	if (filename.has_value()) Cache::filename = filename;
+	else if (!Cache::filename.has_value()) throw runtime_error("no filename provided");
 	
-	std::ofstream file(Cache::filename.value(), std::ios::out | std::ios::trunc);
-	if (!file.is_open()) {
-		throw std::runtime_error("could not open file");
-	}
+	ofstream file(Cache::filename.value(), ios::out | ios::trunc);
+	if (!file.is_open()) throw runtime_error("could not open file");
 	
 	try {
 		// keep track of products
-		std::vector<std::shared_ptr<Product>> products = std::vector<std::shared_ptr<Product>>();
+		vector<shared_ptr<Product>> products = vector<shared_ptr<Product>>();
 		
 		// iterate and encode user data to file
-		for (std::map<std::string, std::shared_ptr<User>>::const_iterator iterator = Cache::users.value().begin(); iterator != Cache::users.value().end(); ++iterator) {
-			const std::shared_ptr<User>& user = iterator->second;
-			std::string ret = user->getType() + ":" + user->getName() + "|" + user->getEmail() + "|" + user->getPassword();
+		for (map<string, shared_ptr<User>>::const_iterator iterator = Cache::users.value().begin(); iterator != Cache::users.value().end(); ++iterator) {
+			const shared_ptr<User>& user = iterator->second;
+			string ret = user->getType() + ":" + user->getName() + "|" + user->getEmail() + "|" + user->getPassword();
 			
 			// encode user type specific data
 			if (user->getType() == "Buyer") {
-				const Buyer& buyer = *std::dynamic_pointer_cast<Buyer>(user);
-				ret += "|" + std::to_string(buyer.getWallet().getBalance());
+				const Buyer& buyer = *dynamic_pointer_cast<Buyer>(user);
+				ret += "|" + to_string(buyer.getWallet().getBalance());
 				
 				// encode orders
-				for (std::size_t i = 0; i < buyer.myOrders.size(); ++i) {
+				for (size_t i = 0; i < buyer.myOrders.size(); ++i) {
 					ret += "|" + products[i]->getId();
 					
 					// add product to tracking vector
 					push_back_unique(products, buyer.myOrders[i]);
 				}
 			} else if (user->getType() == "Seller") {
-				const Seller& seller = *std::dynamic_pointer_cast<Seller>(user);
+				const Seller& seller = *dynamic_pointer_cast<Seller>(user);
 				ret += "|" + seller.getCompany();
 				
 				// encode products
-				for (std::size_t i = 0; i < seller.getProducts().size(); ++i) {
+				for (size_t i = 0; i < seller.getProducts().size(); ++i) {
 					ret += "|" + products[i]->getId();
 					
 					// add product to tracking vector
 					push_back_unique(products, seller.getProducts()[i]);
 				}
-			} else {
-				throw CacheException();
-			}
+			} else { throw CacheException(); }
 			
 			file << ret << "\n";
 		}
 		
 		// iterate and encode transaction data to file
-		for (std::map<std::size_t, std::shared_ptr<Transaction>>::const_iterator iterator = Cache::transactions.value().begin(); iterator != Cache::transactions.value().end(); ++iterator) {
-			const std::shared_ptr<Transaction>& transaction = iterator->second;
-			std::string ret = "Transaction:" + transaction->getId() + "|" + transaction->getBuyer()->getEmail() + "|" + transaction->getSeller()->getEmail() + "|" + transaction->getProduct()->getId() + "|" + transaction->getTimestamp();
+		for (map<size_t, shared_ptr<Transaction>>::const_iterator iterator = Cache::transactions.value().begin(); iterator != Cache::transactions.value().end(); ++iterator) {
+			const shared_ptr<Transaction>& transaction = iterator->second;
+			string ret = "Transaction:" + transaction->getId() + "|" + transaction->getBuyer()->getEmail() + "|" + transaction->getSeller()->getEmail() + "|" + transaction->getProduct()->getId() + "|" + transaction->getTimestamp();
 			
 			// add product to tracking vector
 			push_back_unique(products, transaction->getProduct());
@@ -418,33 +377,30 @@ void Cache::save_cache(const std::optional<std::string>& filename = std::nullopt
 		}
 		
 		// iterate and encode product data to file
-		for (std::size_t i = 0; i < products.size(); ++i) {
-			const std::shared_ptr<Product>& product = products[i];
-			std::string ret = product->getType() + ":" + product->getName() + "|" + std::to_string(product->getPrice());
+		for (size_t i = 0; i < products.size(); ++i) {
+			const shared_ptr<Product>& product = products[i];
+			string ret = product->getType() + ":" + product->getName() + "|" + to_string(product->getPrice());
 			
 			// encode product type specific data
 			if (product->getType() == "Book") {
-				const Book& book = *std::dynamic_pointer_cast<Book>(product);
-				ret += "|" + book.getAuthor() + "|" + book.getISBN() + "|" + std::to_string(book.getPageCount());
+				const Book& book = *dynamic_pointer_cast<Book>(product);
+				ret += "|" + book.getAuthor() + "|" + book.getISBN() + "|" + to_string(book.getPageCount());
 			} else if (product->getType() == "Clothing") {
-				const Clothing& clothing = *std::dynamic_pointer_cast<Clothing>(product);
+				const Clothing& clothing = *dynamic_pointer_cast<Clothing>(product);
 				ret += "|" + clothing.getSize() + "|" + clothing.getMaterial() + "|" + clothing.getBrand();
 			} else if (product->getType() == "Electronics") {
-				const Electronics& electronics = *std::dynamic_pointer_cast<Electronics>(product);
-				ret += "|" + electronics.getBrand() + "|" + electronics.getModel() + "|" + std::to_string(electronics.getWarrantyMonths());
-			} else {
-				throw CacheException();
-			}
+				const Electronics& electronics = *dynamic_pointer_cast<Electronics>(product);
+				ret += "|" + electronics.getBrand() + "|" + electronics.getModel() + "|" + to_string(electronics.getWarrantyMonths());
+			} else { throw CacheException(); }
 			
 			file << ret << "\n";
 		}
 	} catch (...) {
 		// clean up and rethrow exception
 		file.close();
-		
 		throw;
 	}
 	
-	file << std::flush;
+	file << flush;
 	file.close();
 }

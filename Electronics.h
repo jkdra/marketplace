@@ -4,7 +4,7 @@
 #include "project.h"
 #include <string>
 
-using namespace std
+using namespace std;
 
 class Electronics : public Product {
 public:

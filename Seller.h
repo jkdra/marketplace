@@ -11,10 +11,10 @@ class Seller : public User {
 friend class Cache;
 public:
     Seller(const string& name, const string& email, const string& password, const string& company);
-    string getName() const;
-    string getEmail() const;
-    string getPassword() const;
-    string getType() const;
+    string getName() const override;
+    string getEmail() const override;
+    string getPassword() const override;
+    string getType() const override;
 	string getCompany() const;
     void addProduct(shared_ptr<Product> product);
     void removeProduct(const std::string& productName);
