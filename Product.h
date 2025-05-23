@@ -1,6 +1,10 @@
+// Product.h
+// Gio
+
 #ifndef PRODUCT_H
 #define PRODUCT_H
 
+#include "Discount.h"
 #include <iostream>
 #include <string>
 
@@ -16,7 +20,12 @@ public:
     virtual void display(std::ostream& os) const = 0;
 
     std::string getName() const;
-    double getPrice() const;
+    double getPrice(int quantity = 1) const; // apply to discounts
+    
+    // Discount setter
+    // Astrid Shao
+    void setDiscount(std::unique_ptr<Discount> newDiscount);
+    bool hasDiscount() const; // for displaying discount info
 
     friend std::ostream& operator<<(std::ostream& os, const Product& product);
     bool operator==(const Product& other) const;
@@ -26,6 +35,7 @@ protected:
     std::string id;
     std::string name;
     double price;
+    std::unique_ptr<Discount> discount;
 
 private:
     static std::size_t nextId;
