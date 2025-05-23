@@ -232,7 +232,9 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 		
 		for (auto & dummy : temp_electronics) {
 			// must be unique
-			if (products.find(dummy.id) != products.end()) throw CacheException();
+			if (products.find(dummy.id) != products.end()) {
+				throw CacheException();
+			}
 			
 			shared_ptr<Electronics> electronics = make_shared<Electronics>(dummy.name, dummy.price, dummy.brand, dummy.model, dummy.warranty_months);
 			electronics->id = dummy.id;
@@ -247,7 +249,9 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 		
 		for (auto & dummy : temp_buyers) {
 			// must be unique
-			if (Cache::users.value().find(dummy.email) != Cache::users.value().end()) throw CacheException();
+			if (Cache::users.value().find(dummy.email) != Cache::users.value().end()) {
+				throw CacheException();
+			}
 			
 			shared_ptr<Buyer> buyer = make_shared<Buyer>(dummy.name, dummy.email, dummy.password);
 			
@@ -259,7 +263,9 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 				size_t id = dummy.orders[j];
 				
 				// must be valid
-				if (products.find(id) == products.end()) throw CacheException();
+				if (products.find(id) == products.end()) {
+					throw CacheException();
+				}
 				
 				push_back_unique(buyer->myOrders, products.at(id));
 			}
@@ -268,15 +274,19 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 		}
 		
 		for (auto & dummy : temp_sellers) {
-				// must be unique
-			if (Cache::users.value().find(dummy.email) != Cache::users.value().end()) throw CacheException();
+			// must be unique
+			if (Cache::users.value().find(dummy.email) != Cache::users.value().end()) {
+				throw CacheException();
+			}
 			
 			shared_ptr<Seller> seller = make_shared<Seller>(dummy.name, dummy.email, dummy.password, dummy.company);
 			
 			// apply saved products
 			for (unsigned long id : dummy.products) {
-					// must be valid
-				if (products.find(id) == products.end()) throw CacheException();
+				// must be valid
+				if (products.find(id) == products.end()) {
+					throw CacheException();
+				}
 				
 				push_back_unique(seller->myProducts, products.at(id));
 			}
@@ -286,15 +296,19 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 		Cache::transactions = map<size_t, shared_ptr<Transaction>>();
 		
 		for (auto & dummy : temp_transactions) {
-				// must be unique
-			if (Cache::transactions.value().find(dummy.id) != Cache::transactions.value().end()) throw CacheException();
+			// must be unique
+			if (Cache::transactions.value().find(dummy.id) != Cache::transactions.value().end()) {
+				throw CacheException();
+			}
 			
 			shared_ptr<User> buyer = Cache::users.value().at(dummy.buyer_email);
 			shared_ptr<User> seller = Cache::users.value().at(dummy.seller_email);
 			shared_ptr<Product> product = products.at(dummy.product_id);
 			
 			// must be valid
-			if (buyer == nullptr || seller == nullptr || product == nullptr) throw CacheException();
+			if (buyer == nullptr || seller == nullptr || product == nullptr) {
+				throw CacheException();
+			}
 			
 			shared_ptr<Transaction> transaction = make_shared<Transaction>(buyer, seller, product);
 			
@@ -370,7 +384,9 @@ void Cache::save_cache(const optional<string>& filename = nullopt) {
 					// add product to tracking vector
 					push_back_unique(products, seller.getProducts()[i]);
 				}
-			} else { throw CacheException(); }
+			} else {
+				throw CacheException();
+			}
 			
 			file << ret << "\n";
 		}
@@ -401,7 +417,9 @@ void Cache::save_cache(const optional<string>& filename = nullopt) {
 			} else if (product->getType() == "Electronics") {
 				const Electronics& electronics = *dynamic_pointer_cast<Electronics>(product);
 				ret += "|" + electronics.getBrand() + "|" + electronics.getModel() + "|" + to_string(electronics.getWarrantyMonths());
-			} else { throw CacheException(); }
+			} else {
+				throw CacheException();
+			}
 			
 			file << ret << "\n";
 		}
