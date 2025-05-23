@@ -44,3 +44,9 @@ void Buyer::display(std::ostream& os) const {
 		<< "\nType: " << getType()
 		<< "\nWallet Balance: $" << getWallet().getBalance();
 }
+void Buyer::depositToWallet(double amount) {
+	wallet.deposit(amount);
+}
+const vector<shared_ptr<Product>>& Buyer::getOrders() const {
+	return myOrders;
+}
