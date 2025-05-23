@@ -4,6 +4,11 @@
 
 using namespace std;
 
+std::optional<std::map<std::string, std::shared_ptr<User>>> Cache::users;
+std::optional<std::map<size_t, std::shared_ptr<Transaction>>> Cache::transactions;
+std::optional<std::string> Cache::filename;
+
+
 // self-explanatory, only append if not already in vector
 template<typename T>
 void push_back_unique(vector<T>& vec, const T& value) {
@@ -11,6 +16,7 @@ void push_back_unique(vector<T>& vec, const T& value) {
 		vec.push_back(value);
 	}
 }
+
 
 // split string into parts by delimiter
 vector<string> split(const string& str, char delimiter) {
