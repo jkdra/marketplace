@@ -1,3 +1,6 @@
+// Product.cpp
+// Gio
+
 #include "Product.h"
 #include <iostream>
 
@@ -23,8 +26,20 @@ std::string Product::getName() const {
     return name;
 }
 
-double Product::getPrice() const {
+double Product::getPrice(int quantity) const {
+    if (discount){ // if discount has been applied - Astrid Shao
+        return discount->applyDiscount(price, quantity);
+    }
     return price;
+}
+
+// Discount - Setter
+// Astrid Shao
+void Product::setDiscount(std::unique_ptr<Discount> newDiscount){
+    discount = std::move(newDiscount); // transfers ownership
+}
+bool Product::hasDiscount() const{
+    return discount != nullptr;
 }
 
 // Equality( same name, price, type, and ID )
