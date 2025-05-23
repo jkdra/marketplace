@@ -38,3 +38,9 @@ void Buyer::addOrder(const shared_ptr<Product>& product) {
 	else throw InsufficientFundsException();
 }
 
+void Buyer::display(std::ostream& os) const {
+	os << "Name: " << getName()
+		<< "\nEmail: " << getEmail()
+		<< "\nType: " << getType()
+		<< "\nWallet Balance: $" << getWallet().getBalance();
+}
