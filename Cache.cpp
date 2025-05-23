@@ -62,6 +62,7 @@ int parse_int(const std::string& str) {
 	}
 }
 
+// attempt to load cache from file
 void Cache::load_cache(const std::string& filename = "exampledata.txt") {
 	// try open file
 	std::string fileStr = "";
@@ -347,12 +348,18 @@ void Cache::load_cache(const std::string& filename = "exampledata.txt") {
 	Cache::filename = filename;
 }
 
-void Cache::save_cache() {
+// attempt to save cache to file
+void Cache::save_cache(const std::optional<std::string>& filename = std::nullopt) {
 	// check for valid cache
 	if (!Cache::users.has_value()) {
 		throw CacheException();
+	}
+	
+	// overwrite cache filename if provided
+	if (filename.has_value()) {
+		Cache::filename = filename;
 	} else if (!Cache::filename.has_value()) {
-		throw CacheException();
+		throw std::runtime_error("no filename provided");
 	}
 	
 	std::ofstream file(Cache::filename.value(), std::ios::out | std::ios::trunc);

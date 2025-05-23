@@ -16,12 +16,15 @@
 class Cache {
 	public:
 	
+	// attempt to load cache from file
 	static void load_cache(const std::string& filename);
-	static void save_cache();
+	
+	// attempt to save cache to file
+	static void save_cache(const std::optional<std::string>& filename);
 	
 	private:
 	
-	// current target file
+	// current target file, 
 	static std::optional<std::string> filename;
 	
 	// functional cache
