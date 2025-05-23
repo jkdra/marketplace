@@ -7,28 +7,31 @@
 using namespace std;
 
 // Justin Dodd
-class CacheException : public runtime_error {
+class CacheException : public exception {
 	public:
-	
-	CacheException() : runtime_error("invalid cache") {}
+	ProductNotFoundException() {}
+	const char* what() const noexcept override { return "Invalid Cache"; }
 };
 
 // Jawad Khadra
-class InsufficientFundsException : public runtime_error {
+class InsufficientFundsException : public exception {
 public:
-InsufficientFundsException() : runtime_error("Insufficient funds") {}
-}
+	InsufficientFundsException() {}
+	const char* what() const noexcept override { return "Insufficient Funds"; }
+};
 
 // Jawad Khadra
-class ProductNotFoundException : public runtime_error {
+class ProductNotFoundException : public exception {
 public:
-ProductNotFoundException() : runtime_error("Product not found") {}
-}
+	ProductNotFoundException() {}
+	const char* what() const noexcept override { return "Product Not Found"; }
+};
 
 // Jawad Khadra
-class UnauthorizedActionException : public runtime_error {
+class UnauthorizedActionException : public exception {
 public:
-UnauthorizedActionException() : runtime_error("Unauthorized action") {}
-}
+	UnauthorizedActionException() {}
+	const char* what() const noexcept override { return "Unauthorized Action"; }
+};
 
 #endif // EXCEPTIONS_H
