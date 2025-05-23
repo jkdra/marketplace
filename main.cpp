@@ -14,8 +14,7 @@ using namespace std;
 vector<std::shared_ptr<Product>> products;
 
 // Needed for run-time
-User::User(const string &name, const string &email, const string &password) { }
-Product::Product(const std::string &name, double price) { }
+//Product::Product(const std::string &name, double price) { }
 
 
 void displayAllProducts(const std::vector<std::shared_ptr<Product>>& products) {
