@@ -31,7 +31,7 @@ void Clothing::display(std::ostream& os) const {
         << ") - $"
         << price;
   
-    // if discount has been applied
+    // if a discount has been applied
     if (hasDiscount()) { 
             os << "\n  Discounted Price: $" << getPrice()
                << "\n  You Save: $" << (price - getPrice());
