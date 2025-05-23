@@ -2,6 +2,7 @@
 #ifndef USER_H
 #define USER_H
 #include "project.h"
+#include "Cache.h"
 #include <memory>
 #include <vector>
 #include <memory>
@@ -23,25 +24,6 @@ protected:
 	string name;
 	string email;
 	string password;
-};
-
-class storeUser {
-private:
-	vector<shared_ptr<User>> users;
-public:
-	~storeUser();
-	void addUser(shared_ptr<User> user);
-	// storeUser.h
-	shared_ptr<User> findUserByEmail(const string& email);
-
-	void displayAllUsers() const {
-		if (users.empty()) {
-			cout << "No users registered." << endl;
-			return;
-		}
-		
-		for (const auto& user : users) cout << *user << endl;
-	}
 };
 
 #endif //USER_H

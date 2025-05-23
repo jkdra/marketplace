@@ -2,9 +2,11 @@
 
 #include "Cache.h"
 
-optional<map<string, shared_ptr<User>>> Cache::users;
-optional<map<size_t, shared_ptr<Transaction>>> Cache::transactions;
-optional<string> Cache::filename;
+// init static variables
+optional<map<string, shared_ptr<User>>> Cache::users = nullopt;
+optional<map<size_t, shared_ptr<Product>>> Cache::products = nullopt;
+optional<map<size_t, shared_ptr<Transaction>>> Cache::transactions = nullopt;
+optional<string> Cache::filename = nullopt;
 
 // self-explanatory, only append if not already in vector
 template<typename T>
@@ -241,6 +243,7 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 		}
 		
 		Product::nextId = max_id + 1;
+		Cache::products = products;
 		
 		// create users
 		Cache::users = map<string, shared_ptr<User>>();
@@ -413,4 +416,36 @@ void Cache::save_cache(const optional<string>& filename = nullopt) {
 	
 	file << flush;
 	file.close();
+}
+
+optional<map<string, shared_ptr<User>>> Cache::get_users() {
+	return Cache::users;
+}
+
+optional<map<size_t, shared_ptr<Transaction>>> Cache::get_transactions() {
+	return Cache::transactions;
+}
+
+shared_ptr<User> Cache::get_user(const string& email) {
+	if (!Cache::users.has_value()) {
+		return nullptr;
+	}
+	
+	auto it = Cache::users.value().find(email);
+	if (it != Cache::users.value().end()) {
+		return it->second;
+	}
+	
+	return nullptr;
+}
+
+void Cache::display_all_users() {
+	if (!Cache::users.has_value()) {
+		cout << "No users registered." << endl;
+		return;
+	}
+	
+	for (const auto& user : Cache::users.value()) {
+		cout << *user.second << endl;
+	}
 }

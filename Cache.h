@@ -22,6 +22,13 @@ class Cache {
 	// attempt to save cache to file
 	static void save_cache(const optional<string>& filename);
 	
+	static optional<map<string, shared_ptr<User>>> get_users();
+	static optional<map<size_t, shared_ptr<Transaction>>> get_transactions();
+	
+	static shared_ptr<User> get_user(const string& email);
+	
+	static void display_all_users();
+	
 	private:
 	
 	// current target file, 
@@ -29,6 +36,7 @@ class Cache {
 	
 	// functional cache
 	static optional<map<string, shared_ptr<User>>> users;
+	static optional<map<size_t, shared_ptr<Product>>> products;
 	static optional<map<size_t, shared_ptr<Transaction>>> transactions;
 };
 
