@@ -3,26 +3,31 @@
 #include "Product.h"
 #include <string>
 
+using namespace std;
+
 class Clothing : public Product {
 public:
-    Clothing(const std::string& name,
+    Clothing(const string& name,
              double price,
-             const std::string& size,
-             const std::string& material,
-             const std::string& brand);
+             const string& size,
+             const string& material,
+             const string& brand);
 
     // Product interface
-    std::string getType() const override;
-    void display(std::ostream& os) const override;
+    string getType() const override;
+    void display(ostream& os) const override;
 
     // Accessors
-    const std::string& getSize() const;
-    const std::string& getMaterial() const;
-    const std::string& getBrand() const;
+    const string& getSize() const;
+    const string& getMaterial() const;
+    const string& getBrand() const;
+
+    // Overloading << operator by Jawad Khadra
+    friend ostream& operator<<(ostream& os, const Clothing& clothing);
 
 private:
-    std::string size;
-    std::string material;
-    std::string brand;
+    string size;
+    string material;
+    string brand;
 };
 #endif //CLOTHING_H

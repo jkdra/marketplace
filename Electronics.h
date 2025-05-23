@@ -4,26 +4,31 @@
 #include "project.h"
 #include <string>
 
+using namespace std
+
 class Electronics : public Product {
 public:
-    Electronics(const std::string& name,
+    Electronics(const string& name,
                 double price,
-                const std::string& brand,
-                const std::string& model,
+                const string& brand,
+                const string& model,
                 int warrantyMonths);
 
     // Product interface
-    std::string getType() const override;
-    void display(std::ostream& os) const override;
+    string getType() const override;
+    void display(ostream& os) const override;
 
     // Accessors
-    const std::string& getBrand() const;
-    const std::string& getModel() const;
+    const string& getBrand() const;
+    const string& getModel() const;
     int getWarrantyMonths() const;
+    
+    // Overloading << operator by Jawad Khadra
+    friend ostream& operator<<(ostream& os, const Electronics& electronics);
 
 private:
-    std::string brand;
-    std::string model;
+    string brand;
+    string model;
     int warrantyMonths;
 };
 

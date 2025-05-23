@@ -1,11 +1,13 @@
 #include "Book.h"
 #include <iostream>
 
+using namespace std;
+
 // Constructor
-Book::Book(const std::string& name,
+Book::Book(const string& name,
            double price,
-           const std::string& author,
-           const std::string& isbn,
+           const string& author,
+           const string& isbn,
            int pageCount)
   : Product(name, price)
   , author(author)
@@ -14,12 +16,12 @@ Book::Book(const std::string& name,
 {}
 
 // Type tag
-std::string Book::getType() const {
+string Book::getType() const {
     return "Book";
 }
 
 // Print all details
-void Book::display(std::ostream& os) const {
+void Book::display(ostream& os) const {
     os  << "[Book] "
         << name
         << " by "
@@ -31,7 +33,7 @@ void Book::display(std::ostream& os) const {
         << " pp.) - $"
         << price;
 
-    // if discount has been applied
+    // if a discount has been applied
      if (hasDiscount()) {    
            os << "\n  Discounted Price: $" << getPrice()
            << "\n  You Save: $" << (price - getPrice());
@@ -39,12 +41,18 @@ void Book::display(std::ostream& os) const {
     os << "\n";
 }
 
+// Overloading << operator by Jawad Khadra
+ostream& operator<<(ostream& os, const Book& book) {
+    book.display(os);
+    return os;
+}
+
 // Accessors
-const std::string& Book::getAuthor() const {
+const string& Book::getAuthor() const {
     return author;
 }
 
-const std::string& Book::getISBN() const {
+const string& Book::getISBN() const {
     return isbn;
 }
 

@@ -23,8 +23,8 @@ void Clothing::display(std::ostream& os) const {
     os  << "[Clothing] "
         << brand
         << " "
-        << name
-        << " (Size: "
+        << name << endl
+        << "(Size: "
         << size
         << ", Material: "
         << material
@@ -37,6 +37,11 @@ void Clothing::display(std::ostream& os) const {
                << "\n  You Save: $" << (price - getPrice());
         }
         os << "\n";
+}
+
+std::ostream& operator<<(std::ostream& os, const Clothing& clothing) {
+    clothing.display(os);
+    return os;
 }
 
 // Accessors

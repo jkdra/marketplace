@@ -46,3 +46,8 @@ void Seller::display(std::ostream& os) const {
 		<< "\nCompany: " << company;
 }
 
+std::ostream& operator<<(std::ostream& os, const Seller& seller) {
+    seller.display(os);
+    return os;
+}
+

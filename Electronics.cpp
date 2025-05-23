@@ -1,11 +1,13 @@
 #include "Electronics.h"
 #include <iostream>
 
+using namespace std;
+
 // Constructor
-Electronics::Electronics(const std::string& name,
+Electronics::Electronics(const string& name,
                          double price,
-                         const std::string& brand,
-                         const std::string& model,
+                         const string& brand,
+                         const string& model,
                          int warrantyMonths)
   : Product(name, price)
   , brand(brand)
@@ -14,12 +16,12 @@ Electronics::Electronics(const std::string& name,
 {}
 
 // Type tag
-std::string Electronics::getType() const {
+string Electronics::getType() const {
     return "Electronics";
 }
 
 // Print all details
-void Electronics::display(std::ostream& os) const {
+void Electronics::display(ostream& os) const {
     os  << "[Electronics] "
         << brand
         << " "
@@ -38,12 +40,18 @@ void Electronics::display(std::ostream& os) const {
         os << "\n";
 }
 
+// Overloading << operator by Jawad Khadra
+ostream& operator<<(ostream& os, const Electronics& electronics) {
+    electronics.display(os);
+    return os;
+}
+
 // Accessors
-const std::string& Electronics::getBrand() const {
+const string& Electronics::getBrand() const {
     return brand;
 }
 
-const std::string& Electronics::getModel() const {
+const string& Electronics::getModel() const {
     return model;
 }
 

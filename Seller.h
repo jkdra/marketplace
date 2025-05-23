@@ -20,6 +20,8 @@ public:
     void removeProduct(const std::string& productName);
     const std::vector<std::shared_ptr<Product>>& getProducts() const;
     void display(std::ostream& os) const override;
+    // Overloading << operator by Jawad Khadra
+    friend std::ostream& operator<<(std::ostream& os, const Seller& seller);
 
 private:
     string company;
