@@ -101,7 +101,7 @@ void displayMenu(const std::string& userName) {
 }
 
 // Jawad Khadra
-shared_ptr<User> createAccount() {
+shared_ptr<User> createAccount(storeUser& userStoring) {
     cout << "Create a new account\n";
     cout << "Enter user type (1 for Buyer, 2 for Seller): ";
     int userType;
@@ -139,13 +139,12 @@ shared_ptr<User> createAccount() {
         return nullptr;
     }
     
-	Cache::get_users().value().emplace(email, newUser);
-	
+    userStoring.addUser(newUser);
     cout << "Account created successfully!\n";
     return newUser;
 }
 
-shared_ptr<User> userAuthentication() {
+shared_ptr<User> userAuthentication(storeUser& userStoring) {
     shared_ptr<User> currentUser = nullptr;
     bool authenticated = false;
     
@@ -156,7 +155,7 @@ shared_ptr<User> userAuthentication() {
         
         if (email == "exit") exit(EXIT_SUCCESS);
         
-        shared_ptr<User> user = Cache::get_user(email);
+        shared_ptr<User> user = userStoring.findUserByEmail(email);
         
         if (user) {
             // User exists, ask for password
@@ -182,7 +181,7 @@ shared_ptr<User> userAuthentication() {
             getline(cin, response);
             
             if (response == "y" || response == "Y") {
-                currentUser = createAccount();
+                currentUser = createAccount(userStoring);
                 if (currentUser) authenticated = true;
             }
         }
@@ -192,10 +191,11 @@ shared_ptr<User> userAuthentication() {
 }
 
 int main() {
+    storeUser userStoring;
     shared_ptr<User> currentUser = nullptr;
     
     // Handle user authentication before showing the main menu
-    currentUser = userAuthentication();
+    currentUser = userAuthentication(userStoring);
     
     if (!currentUser) {
         cout << "Authentication failed. Exiting program.\n";
@@ -207,7 +207,7 @@ int main() {
     
     do {
         if (!loggedIn) {
-            currentUser = userAuthentication();
+            currentUser = userAuthentication(userStoring);
             loggedIn = (currentUser != nullptr);
             if (!loggedIn) {
                 cout << "Authentication failed. Exiting program.\n";
@@ -336,6 +336,8 @@ int main() {
                         }
                         
                         products.push_back(newProduct);
+                        seller->addProduct(newProduct);
+                        cout << "Product added successfully.\n";
                         cout << "Product added successfully.\n";
                     }
                 } else {
@@ -344,7 +346,7 @@ int main() {
                 break;
             }
             case 2: {
-                shared_ptr<User> newUser = createAccount();
+                shared_ptr<User> newUser = createAccount(userStoring);
                 break;
             }
             case 3: {
@@ -426,9 +428,9 @@ int main() {
                 break;
             case 5:
                 // Display users
-                if (Cache::get_user(currentUser->getEmail())) {
+                if (userStoring.findUserByEmail(currentUser->getEmail())) {
                     cout << "\n===== Registered Users =====\n";
-                    Cache::display_all_users();
+                    userStoring.displayAllUsers();
                 } else {
                     cout << "No users found.\n";
                 }
