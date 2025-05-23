@@ -2,12 +2,9 @@
 
 #include "Cache.h"
 
-using namespace std;
-
-std::optional<std::map<std::string, std::shared_ptr<User>>> Cache::users;
-std::optional<std::map<size_t, std::shared_ptr<Transaction>>> Cache::transactions;
-std::optional<std::string> Cache::filename;
-
+optional<map<string, shared_ptr<User>>> Cache::users;
+optional<map<size_t, shared_ptr<Transaction>>> Cache::transactions;
+optional<string> Cache::filename;
 
 // self-explanatory, only append if not already in vector
 template<typename T>
@@ -16,7 +13,6 @@ void push_back_unique(vector<T>& vec, const T& value) {
 		vec.push_back(value);
 	}
 }
-
 
 // split string into parts by delimiter
 vector<string> split(const string& str, char delimiter) {
@@ -224,7 +220,9 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 			DummyClothing& dummy = temp_clothing[i];
 			
 			// must be unique
-			if (products.find(dummy.id) != products.end()) throw CacheException();
+			if (products.find(dummy.id) != products.end()) {
+				throw CacheException();
+			}
 			
 			shared_ptr<Clothing> clothing = make_shared<Clothing>(dummy.name, dummy.price, dummy.size, dummy.material, dummy.brand);
 			clothing->id = dummy.id;
@@ -233,7 +231,7 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 		}
 		
 		for (auto & dummy : temp_electronics) {
-				// must be unique
+			// must be unique
 			if (products.find(dummy.id) != products.end()) throw CacheException();
 			
 			shared_ptr<Electronics> electronics = make_shared<Electronics>(dummy.name, dummy.price, dummy.brand, dummy.model, dummy.warranty_months);
@@ -248,8 +246,8 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 		Cache::users = map<string, shared_ptr<User>>();
 		
 		for (auto & dummy : temp_buyers) {
-				// must be unique
-			if (Cache::users.value().contains(dummy.email)) throw CacheException();
+			// must be unique
+			if (Cache::users.value().find(dummy.email) != Cache::users.value().end()) throw CacheException();
 			
 			shared_ptr<Buyer> buyer = make_shared<Buyer>(dummy.name, dummy.email, dummy.password);
 			
@@ -325,14 +323,20 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 // attempt to save cache to file
 void Cache::save_cache(const optional<string>& filename = nullopt) {
 	// check for valid cache
-	if (!Cache::users.has_value()) throw CacheException();
+	if (!Cache::users.has_value()) {
+		throw CacheException();
+	}
 	
 	// overwrite cache filename if provided
 	if (filename.has_value()) Cache::filename = filename;
-	else if (!Cache::filename.has_value()) throw runtime_error("no filename provided");
+	else if (!Cache::filename.has_value()) {
+		throw runtime_error("no filename provided");
+	}
 	
 	ofstream file(Cache::filename.value(), ios::out | ios::trunc);
-	if (!file.is_open()) throw runtime_error("could not open file");
+	if (!file.is_open()) {
+		throw runtime_error("could not open file");
+	}
 	
 	try {
 		// keep track of products
