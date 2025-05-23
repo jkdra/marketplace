@@ -10,13 +10,15 @@
 
 
 class Buyer : public User {
+friend class Cache;
+
 public:
     Buyer(const string& name, const string& email, const string& password);
     string getName() const;
     string getEmail() const;
     string getPassword() const;
     string getType() const;
-    Wallet& getWallet();
+    Wallet& getWallet() const;
     void addOrder(shared_ptr<Product> product);
     void display(std::ostream& os) const override;
 

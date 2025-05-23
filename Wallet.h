@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 class Wallet {
+friend class Cache;
 public:
     explicit Wallet(double balance = 0.0);
 

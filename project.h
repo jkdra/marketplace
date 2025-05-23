@@ -16,6 +16,7 @@
 #include <set>
 #include <iterator>
 #include <memory>
+#include <optional>
 
 using namespace std;
 

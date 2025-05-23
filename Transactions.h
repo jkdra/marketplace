@@ -7,6 +7,7 @@
 #include "Product.h"
 
 class Transaction {
+friend class Cache;
 public:
     Transaction(std::shared_ptr<User> buyer,
                 std::shared_ptr<User> seller,

@@ -9,6 +9,7 @@
 #include <string>
 
 class Product {
+friend class Cache;
 public:
     Product(const std::string& name, double price);
     virtual ~Product() = default;

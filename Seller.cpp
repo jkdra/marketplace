@@ -18,6 +18,9 @@ string Seller::getPassword() const {
 string Seller::getType() const {
 	return "Seller";
 }
+string Seller::getCompany() const {
+	return company;
+}
 
 void Seller::addProduct(std::shared_ptr<Product> product) {
     myProducts.push_back(product);

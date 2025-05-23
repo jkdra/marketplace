@@ -26,7 +26,7 @@ std::ostream& operator<<(std::ostream& os, const Seller& seller) {
 	return os;
 }
 
-Wallet& Buyer::getWallet() {
+Wallet& Buyer::getWallet() const {
 	return myWallet;
 }
 void Buyer::addOrder(shared_ptr<Product> product) {
