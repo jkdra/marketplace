@@ -7,6 +7,7 @@
 #include "Electronics.h"
 #include "PercentageDiscount.h"
 #include "BundleDiscount.h"
+#include "Search.h"
 #include <iomanip>
 #include <sstream>
 using namespace std;
@@ -29,6 +30,58 @@ void clearInputBuffer() {
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
+//Astird Shao
+void searchProducts() {
+    if (products.empty()) {
+        cout << "No products available to search.\n";
+        return;
+    }
+    
+    Search searcher(products);
+    int searchChoice;
+    
+    cout << "\n===== SEARCH OPTIONS =====\n"
+         << "1. Search by Name\n"
+         << "2. Search by Type\n"
+         << "3. Search by Price Range\n"
+         << "4. Back to Main Menu\n"
+         << "=======================\n"
+         << "Enter your choice: ";
+    cin >> searchChoice;
+    clearInputBuffer();
+
+    switch(searchChoice) {
+        case 1: {
+            string name;
+            cout << "Enter product name to search: ";
+            getline(cin, name);
+            searcher.searchByName(name);
+            break;
+        }
+        case 2: {
+            string type;
+            cout << "Enter product type to search: ";
+            getline(cin, type);
+            searcher.searchByType(type);
+            break;
+        }
+        case 3: {
+            double minPrice, maxPrice;
+            cout << "Enter minimum price: ";
+            cin >> minPrice;
+            cout << "Enter maximum price: ";
+            cin >> maxPrice;
+            clearInputBuffer();
+            searcher.searchByRange(minPrice, maxPrice);
+            break;
+        }
+        case 4:
+            return; // Back to main menu
+        default:
+            cout << "Invalid search option.\n";
+    }
+}
+
 // Jawad Khadra
 void displayMenu(const std::string& userName) {
     cout << "\n====================================\n";
@@ -40,7 +93,8 @@ void displayMenu(const std::string& userName) {
          << "4. Display Products" << endl
          << "5. Display Users" << endl
          << "6. Display Orders" << endl
-         << "7. Logout" << endl
+         << "7, Search Products" << endl
+         << "8. Logout" << endl
          << "0. Exit" << endl;
     cout << "====================================\n";
 }
@@ -397,7 +451,10 @@ int main() {
                 }
                 break;
 
-            case 7:
+            case 7: // search products/ filter system
+                searchProducts();
+		    break;
+            case 8:
                 // Logout
                 cout << "Logging out...\n";
                 loggedIn = false;
