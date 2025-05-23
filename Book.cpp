@@ -30,6 +30,13 @@ void Book::display(std::ostream& os) const {
         << pageCount
         << " pp.) - $"
         << price;
+
+    // if discount has been applied
+     if (hasDiscount()) {    
+           os << "\n  Discounted Price: $" << getPrice()
+           << "\n  You Save: $" << (price - getPrice());
+        }
+    os << "\n";
 }
 
 // Accessors
