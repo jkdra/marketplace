@@ -95,6 +95,7 @@ void displayMenu(const std::string& userName) {
          << "6. Display Orders" << endl
          << "7, Search Products" << endl
          << "8. Logout" << endl
+	 << "9. Remove Product" << endl
          << "0. Exit" << endl;
     cout << "====================================\n";
 }
@@ -459,6 +460,33 @@ int main() {
                 cout << "Logging out...\n";
                 loggedIn = false;
                 break;
+	    case 9: {
+    if (auto seller = dynamic_pointer_cast<Seller>(currentUser)) {
+        const auto& sellerProducts = seller->getProducts();
+        if (sellerProducts.empty()) {
+            cout << "You have no products to remove.\n";
+            break;
+        }
+
+        // Display current products
+        cout << "\n===== Your Products =====\n";
+        for (size_t i = 0; i < sellerProducts.size(); ++i) {
+            cout << i + 1 << ". " << *sellerProducts[i] << "\n";
+        }
+
+        // Ask for product name to remove
+        cout << "\nEnter the name of the product you want to remove: ";
+        string name;
+        getline(cin, name);
+
+        seller->removeProduct(name);
+        cout << "Product(s) removed if matched.\n";
+    } else {
+        cout << "Only sellers can remove products.\n";
+    }
+    break;
+}
+
         }
     } while (true);
     
