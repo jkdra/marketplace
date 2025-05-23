@@ -30,6 +30,12 @@ void Electronics::display(std::ostream& os) const {
         << warrantyMonths
         << "-month warranty) - $"
         << price;
+
+     if (hasDiscount()) { // if discount has been applied
+            os << "\n  Discounted Price: $" << getPrice()
+               << "\n  You Save: $" << (price - getPrice());
+        }
+        os << "\n";
 }
 
 // Accessors
