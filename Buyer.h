@@ -23,6 +23,9 @@ public:
 
     Wallet getWallet() const;
     void addOrder(const shared_ptr<Product> &product);
+    void depositToWallet(double amount);
+    const vector<shared_ptr<Product>>& getOrders() const;
+
 
     // Overloading << operator by Jawad Khadra
     friend ostream& operator<<(ostream& os, const Buyer& buyer);
