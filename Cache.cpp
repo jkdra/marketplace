@@ -313,6 +313,7 @@ void Cache::load_cache(const string& filename = "exampledata.txt") {
 		Cache::filename = nullopt;
 		
 		Cache::users = nullopt;
+		Cache::products = nullopt;
 		Cache::transactions = nullopt;
 		
 		throw;
