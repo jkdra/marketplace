@@ -65,7 +65,13 @@ shared_ptr<User> createAccount(storeUser& userStoring) {
     shared_ptr<User> newUser;
     
     if (userType == 1) {
+        double startingBalance;
+        cout << "Enter initial wallet balance: ";
+        cin >> startingBalance;
+        clearInputBuffer();
         newUser = make_shared<Buyer>(name, email, password);
+        dynamic_pointer_cast<Buyer>(newUser)->depositToWallet(startingBalance);
+
     }
     else if (userType == 2) {
         string company;
@@ -326,7 +332,7 @@ int main() {
                     cout << "Product: " << selectedProduct->getName() << "\n";
                     cout << "Quantity: " << quantity << "\n";
                     cout << "Total Price: $" << fixed << setprecision(2) << totalPrice << "\n";
-                    
+                    cout << "Wallet Balance: $" << buyer->getWallet().getBalance() << "\n";
                     cout << "Confirm order? (y/n): ";
                     string confirm;
                     getline(cin, confirm);
@@ -338,8 +344,14 @@ int main() {
                                     << " (x" << quantity << ") - $" 
                                     << fixed << setprecision(2) << totalPrice;
                         
-                        buyer->addOrder(selectedProduct);
-                        cout << "Order placed successfully!\n";
+                        try {
+                            buyer->addOrder(selectedProduct);
+                            cout << "Order placed successfully!\n";
+                        }
+                        catch (const InsufficientFundsException& e) {
+                            cout << "Order failed: " << e.what() << "\n";
+                        }
+                        
                     } else {
                         cout << "Order cancelled.\n";
                     }
@@ -370,8 +382,21 @@ int main() {
                 // Display orders
                 if (auto buyer = dynamic_pointer_cast<Buyer>(currentUser)) {
                     cout << "\n===== Your Orders =====\n";
-                } else cout << "Only buyers can view orders.\n";
+                    const auto& orders = buyer->getOrders();  // We'll define this getter next
+                    if (orders.empty()) {
+                        cout << "You have no orders.\n";
+                    }
+                    else {
+                        for (const auto& order : orders) {
+                            cout << *order << "\n";
+                        }
+                    }
+                }
+                else {
+                    cout << "Only buyers can view orders.\n";
+                }
                 break;
+
             case 7:
                 // Logout
                 cout << "Logging out...\n";
